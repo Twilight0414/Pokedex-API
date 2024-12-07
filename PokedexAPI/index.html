@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex</title>
+  <link rel="icon" href="https://media.baamboozle.com/uploads/images/77925/1594129827_86842">
+  <style>
+    /* Estilo geral */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #ef5350, #f44336);
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    header p {
+      font-size: 1.2em;
+      margin-top: 5px;
+    }
+    
+
+    /* Contêiner de Pokémon */
+    .pokemon-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Quatro cards por fileira */
+      gap: 30px; /* Espaço maior entre cards */
+      margin: 20px;
+      padding: 10px;
+    }
+
+    /* Card de Pokémon */
+    .pokemon-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pokemon-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .pokemon-card img {
+      max-width: 180px; /* Aumento no tamanho da imagem */
+      margin: 15px 0;
+    }
+    .pokemon-card h3 {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+        text-transform: capitalize;
+        background: linear-gradient(90deg, #030100, #7c7c7c);
+        text-align: center;
+        margin: 10px 0;
+        padding: 5px;
+    }
+    .pokemon-card p {
+      font-size: 1em;
+      color: #555;
+    }
+
+    /* Número do Pokémon */
+    .pokemon-number {
+      font-weight: bold;
+      font-size: 1em;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    /* Tipos de Pokémon */
+    .pokemon-types {
+      display: flex;
+      justify-content: center;
+      gap: 10px; /* Maior espaçamento entre os tipos */
+    }
+    .pokemon-type {
+      font-size: 0.9em;
+      padding: 6px 12px; /* Maior tamanho das etiquetas */
+      border-radius: 5px;
+      color: white;
+      text-transform: capitalize;
+    }
+
+    /* Cores dos tipos */
+    .type-grass { background-color: #78c850; }
+    .type-poison { background-color: #a040a0; }
+    .type-fire { background-color: #f08030; }
+    .type-water { background-color: #6890f0; }
+    .type-flying { background-color: #a890f0; }
+    .type-electric { background-color: #f8d030; }
+    .type-bug { background-color: #306d11; }
+    .type-normal { background-color: #978f8f; }
+    .type-ground { background-color: #aa9100; }
+    .type-fairy { background-color: rgb(255, 123, 233); }
+    .type-fighting { background-color: #d85600; }
+    .type-psychic { background-color: #c520c5; }
+    .type-rock { background-color: #6e5f06; }
+    .type-ghost { background-color: #630463; }
+    .type-ice { background-color: #71bae4; }
+    .type-dragon { background-color: #01309e; }
+
+    /* Barra de pesquisa */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .search-container input {
+      padding: 10px;
+      font-size: 1.2em;
+      width: 300px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+    .search-container input:focus {
+      border-color: #f44336;
+    }
+
+    /* Botões de paginação */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .pagination button {
+      background-color: #ef5350;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin: 0 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+    .pagination button:hover {
+      background-color: #d32f2f;
+    }
+    .pagination button.disabled {
+      background-color: #e0e0e0;
+      color: #757575;
+      cursor: not-allowed;
+    }
+
+    .loading {
+        font-size: 1.5em;
+        color: #555;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border: 4px solid #ccc;
+        border-top-color: #f00;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+    }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Responsividade */
+    @media (max-width: 1200px) {
+      .pokemon-container {
+        grid-template-columns: repeat(3, 1fr); /* Três cards por fileira */
+      }
+    }
+    @media (max-width: 800px) {
+      .pokemon-container {
+        grid-template-columns: repeat(2, 1fr); /* Dois cards por fileira */
+      }
+    }
+    @media (max-width: 500px) {
+      .pokemon-container {
+        grid-template-columns: 1fr; /* Um card por fileira */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pokédex</h1>
+    <p>Descubra todos os Pokémons de todas as gerações</p>
+  </header>
+
+  <!-- Barra de pesquisa -->
+  <div class="search-container">
+    <input type="text" id="searchBar" placeholder="Pesquise um Pokémon..." />
+  </div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div> Carregando...
+  </div>
+
+  <div class="pokemon-container" id="pokemonContainer"></div>
+
+  <!-- Paginação -->
+  <div class="pagination" id="pagination"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
