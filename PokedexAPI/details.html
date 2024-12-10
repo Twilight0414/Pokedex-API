@@ -98,10 +98,28 @@
     }
 
     .pokemon-name {
-      font-size: 2.5em;
-      margin: 0 0 15px 0;
-      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+
+    .pokemon-name p {
+      margin: 0;
+      font-weight: 600;
       text-transform: capitalize;
+      color: white;
+      position: relative;
+      z-index: 2;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .pokemon-name .number {
+      color: #ccc;
+      font-size: 13px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
 
     .pokemon-types {
@@ -201,44 +219,122 @@
     }
 
     .evolution-chain {
-      background: #fff;
+      background: #3b3b3b;
       border-radius: 15px;
-      padding: 20px;
+      padding: 30px;
       margin: 20px 0;
+      text-align: center;
     }
 
     .evolution-chain h3 {
-      margin-bottom: 20px;
-      color: #333;
+      margin-bottom: 30px;
+      color: white;
+      font-size: 24px;
     }
 
     .evolution-items {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+      gap: 40px;
+      padding: 20px 0;
     }
 
     .evolution-item {
       text-align: center;
+      position: relative;
+      width: 150px;
+      height: 180px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .evolution-item a {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .pokeball-bg {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: 
+        linear-gradient(to bottom, 
+          #ff1c1c 0%, 
+          #ff1c1c 45%, 
+          #222 45%, 
+          #222 55%, 
+          white 55%, 
+          white 100%
+        );
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+      opacity: 0.1;
+      z-index: 1;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pokeball-bg::before {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: white;
+      border: 8px solid #222;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
     }
 
     .evolution-item img {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       object-fit: contain;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .evolution-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .evolution-item a {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
     }
 
     .evolution-item p {
-      margin-top: 10px;
-      font-weight: 500;
+      margin: 0;
+      font-weight: 600;
       text-transform: capitalize;
+      color: white;
+      position: relative;
+      z-index: 2;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
 
     .evolution-arrow {
       font-size: 24px;
-      color: #666;
+      color: white;
+      position: relative;
+      z-index: 2;
+      margin-top: 20px;
     }
 
     .back-button {
@@ -295,6 +391,27 @@
     .pokemon-description p {
       margin: 0;
       font-style: italic;
+    }
+
+    .evolution-types {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .evolution-type {
+      padding: 1px 6px;
+      border-radius: 10px;
+      color: white;
+      font-size: 10px;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes rotate {
+      from { transform: translateX(-50%) rotate(0deg); }
+      to { transform: translateX(-50%) rotate(360deg); }
     }
   </style>
 </head>
@@ -448,16 +565,20 @@
 
           while (current) {
             try {
-              const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${current.species.name}`);
+              const response = await fetch(current.species.url);
+              const speciesData = await response.json();
+              const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${speciesData.id}`);
               const pokemonData = await pokemonResponse.json();
+
               evolutions.push({
                 name: current.species.name,
                 image: pokemonData.sprites.other['official-artwork'].front_default,
-                id: pokemonData.id
+                id: pokemonData.id,
+                types: pokemonData.types.map(type => type.type.name)
               });
               current = current.evolves_to[0];
             } catch (error) {
-              console.error('Erro ao carregar evolução:', error);
+              console.error('Erro ao processar evolução:', error);
               break;
             }
           }
@@ -468,11 +589,20 @@
         const evolutions = await processEvolutionChain(evolutionData.chain);
         const evolutionChainContainer = document.getElementById('evolution-chain');
         evolutionChainContainer.innerHTML = evolutions.map((evolution, index) => `
-          ${index > 0 ? '<div class="evolution-arrow">→</div>' : ''}
+          ${index > 0 ? '<div class="evolution-arrow">></div>' : ''}
           <div class="evolution-item">
+            <div class="pokeball-bg"></div>
             <a href="details.html?id=${evolution.id}">
               <img src="${evolution.image}" alt="${evolution.name}">
-              <p>${capitalize(evolution.name)}</p>
+              <div class="pokemon-name">
+                <p>${capitalize(evolution.name)}</p>
+                <span class="number">Nº ${String(evolution.id).padStart(4, '0')}</span>
+              </div>
+              <div class="evolution-types">
+                ${evolution.types.map(type => `
+                  <span class="evolution-type type-${type.toLowerCase()}">${capitalize(type)}</span>
+                `).join('')}
+              </div>
             </a>
           </div>
         `).join('');
