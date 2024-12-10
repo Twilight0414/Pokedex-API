@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex</title>
+  <link rel="icon" href="https://media.baamboozle.com/uploads/images/77925/1594129827_86842">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f6f6f6;
+      color: #333;
+    }
+  
+    header {
+      background: linear-gradient(90deg, #ef5350, #ff8e53);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+  
+    header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+  
+    header p {
+      font-size: 1.2em;
+      font-weight: 300;
+      margin: 10px 0 0;
+    }
+  
+    .search-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+  
+    .search-container input {
+      width: 300px;
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      outline: none;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+  
+    .search-container input:focus {
+      border-color: #ef5350;
+      box-shadow: 0px 4px 8px rgba(239, 83, 80, 0.3);
+    }
+  
+    .pokemon-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  
+    .pokemon-card {
+      background: linear-gradient(145deg, #ffffff, #f2f2f2);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -2px -2px 10px rgba(255, 255, 255, 0.5);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+  
+    .pokemon-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.2), -2px -2px 10px rgba(255, 255, 255, 0.7);
+    }
+  
+    .pokemon-card img {
+      width: 200px;
+      height: 200px;
+      margin: 15px auto;
+    }
+  
+    .pokemon-card h3 {
+      font-size: 1.6em;
+      font-weight: 600;
+      margin: 15px 0;
+      color: #333;
+    }
+  
+    .pokemon-card .pokemon-number {
+      font-size: 1em;
+      font-weight: bold;
+      color: #888;
+      margin-bottom: 10px;
+    }
+  
+    .pokemon-card .pokemon-types {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+  
+    .pokemon-type {
+      font-size: 0.9em;
+      padding: 8px 30px;
+      border-radius: 15px;
+      text-transform: capitalize;
+      font-weight: 700;
+      color: #fff;
+    }
+  
+    /* Tipos */
+    .type-grass { background-color: #78c850; }
+    .type-poison { background-color: #a040a0; }
+    .type-fire { background-color: #f08030; }
+    .type-water { background-color: #6890f0; }
+    .type-flying { background-color: #a890f0; }
+    .type-electric { background-color: #f8d030; }
+    .type-bug { background-color: #306d11; }
+    .type-normal { background-color: #978f8f; }
+    .type-ground { background-color: #aa9100; }
+    .type-fairy { background-color: rgb(255, 123, 233); }
+    .type-fighting { background-color: #d85600; }
+    .type-psychic { background-color: #c520c5; }
+    .type-rock { background-color: #6e5f06; }
+    .type-ghost { background-color: #630463; }
+    .type-ice { background-color: #71bae4; }
+    .type-dragon { background-color: #01309e; }
+    /* Paginação */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+    }
+  
+    .pagination button {
+      background: #ef5350;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 0 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+  
+    .pagination button:hover {
+      background: #d32f2f;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+  
+    .pagination button.disabled {
+      background: #ddd;
+      color: #888;
+      cursor: not-allowed;
+    }
+  </style>
+  
+  
+</head>
+<body>
+  <header>
+    <h1>Pokédex</h1>
+    <p>Descubra todos os Pokémons de todas as gerações</p>
+  </header>
+
+  <!-- Barra de pesquisa -->
+  <div class="search-container">
+    <input type="text" id="searchBar" placeholder="Pesquise um Pokémon..." />
+  </div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div> Carregando...
+  </div>
+
+  <div class="pokemon-container" id="pokemonContainer"></div>
+
+  <!-- Paginação -->
+  <div class="pagination" id="pagination"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

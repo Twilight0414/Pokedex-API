@@ -35,7 +35,7 @@ function displayPokemon() {
   pokemonContainer.innerHTML = pokemonToDisplay
     .map(
       (pokemon) => `
-      <div class="pokemon-card">
+      <div class="pokemon-card" onclick="openPokemonDetails(${pokemon.id})">
         <div class="pokemon-number">Nº ${String(pokemon.id).padStart(3, '0')}</div>
         <img src="${pokemon.image}" alt="${pokemon.name}" />
         <h3>${pokemon.name}</h3>
@@ -48,6 +48,15 @@ function displayPokemon() {
     `
     )
     .join("");
+}
+
+function openPokemonDetails(id) {
+  window.location.href = `details.html?id=${id}`;
+}
+
+    // Função para abrir a página de detalhes
+  function openPokemonDetails(id) {
+  window.location.href = `details.html?id=${id}`;
 }
 
 // Criar botões de paginação

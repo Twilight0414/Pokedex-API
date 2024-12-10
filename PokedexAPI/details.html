@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Pokémon</title>
+  <link rel="icon" href="https://media.baamboozle.com/uploads/images/77925/1594129827_86842">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #dc0a2d;
+      color: #333;
+      min-height: 100vh;
+    }
+  
+    header {
+      background: #ce0a28;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.2);
+    }
+  
+    header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+  
+    header p {
+      font-size: 1.2em;
+      font-weight: 300;
+      margin: 10px 0 0;
+    }
+
+    .pokemon-details-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .pokemon-details-container::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background: #2196f3;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .pokemon-card {
+      background: linear-gradient(145deg, #ffffff, #f2f2f2);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -2px -2px 10px rgba(255, 255, 255, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .pokemon-header {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .pokemon-image {
+      width: 350px;
+      height: 350px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s ease;
+    }
+
+    .pokemon-image:hover {
+      transform: scale(1.05);
+    }
+
+    .pokemon-info {
+      flex: 1;
+    }
+
+    .pokemon-number {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .pokemon-name {
+      font-size: 2.5em;
+      margin: 0 0 15px 0;
+      color: #333;
+      text-transform: capitalize;
+    }
+
+    .pokemon-types {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .pokemon-type {
+      font-size: 0.9em;
+      padding: 8px 30px;
+      border-radius: 15px;
+      text-transform: capitalize;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pokemon-measures {
+      margin-top: 15px;
+      font-size: 1.1em;
+      color: #666;
+    }
+
+    .stats-container {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px solid #eee;
+    }
+
+    .stats-container h3 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .stat-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .stat-name {
+      width: 120px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .stat-value {
+      width: 40px;
+      text-align: right;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .stat-bar-fill {
+      flex: 1;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .stat-bar-value {
+      height: 100%;
+      background: linear-gradient(90deg, #ef5350, #ff8e53);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .weaknesses-container {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px solid #eee;
+    }
+
+    .weaknesses-container h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .weakness-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .weakness-badge {
+      padding: 8px 20px;
+      border-radius: 20px;
+      color: white;
+      font-size: 0.9em;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .evolution-chain {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .evolution-chain h3 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .evolution-items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .evolution-item {
+      text-align: center;
+    }
+
+    .evolution-item img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    .evolution-item p {
+      margin-top: 10px;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .evolution-arrow {
+      font-size: 24px;
+      color: #666;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: #ef5350;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: #d32f2f;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Tipos de Pokémon */
+    .type-grass { background-color: #78c850; }
+    .type-poison { background-color: #a040a0; }
+    .type-fire { background-color: #f08030; }
+    .type-water { background-color: #6890f0; }
+    .type-flying { background-color: #a890f0; }
+    .type-electric { background-color: #f8d030; }
+    .type-bug { background-color: #306d11; }
+    .type-normal { background-color: #978f8f; }
+    .type-ground { background-color: #aa9100; }
+    .type-fairy { background-color: rgb(255, 123, 233); }
+    .type-fighting { background-color: #d85600; }
+    .type-psychic { background-color: #c520c5; }
+    .type-rock { background-color: #6e5f06; }
+    .type-ghost { background-color: #630463; }
+    .type-ice { background-color: #71bae4; }
+    .type-dragon { background-color: #01309e; }
+
+    .pokemon-description {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px solid #eee;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .pokemon-description h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .pokemon-description p {
+      margin: 0;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Detalhes do Pokémon</h1>
+    <p>Informações detalhadas sobre o Pokémon selecionado</p>
+  </header>
+
+  <a href="main.html" class="back-button">← Voltar</a>
+
+  <div class="pokemon-details-container" id="pokemonDetailsContainer">
+    <div class="pokemon-card">
+      <div class="pokemon-header">
+        <img src="" alt="" class="pokemon-image" id="pokemon-image">
+        <div class="pokemon-info">
+          <div class="pokemon-number" id="pokemon-number"></div>
+          <h2 class="pokemon-name" id="pokemon-name"></h2>
+          <div class="pokemon-types" id="pokemon-types"></div>
+          <div class="pokemon-measures">
+            <p>Altura: <span id="pokemon-height"></span></p>
+            <p>Peso: <span id="pokemon-weight"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pokemon-description">
+        <h3>Descrição</h3>
+        <p id="pokemon-description"></p>
+      </div>
+
+      <div class="stats-container">
+        <h3>Estatísticas</h3>
+        <div id="stats-content"></div>
+      </div>
+
+      <div class="weaknesses-container">
+        <h3>Fraquezas</h3>
+        <div class="weakness-badges" id="weaknesses-content"></div>
+      </div>
+
+      <div class="evolution-chain">
+        <h3>Cadeia de Evolução</h3>
+        <div class="evolution-items" id="evolution-chain"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Função para obter parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pokemonId = urlParams.get('id');
+
+    // Função para capitalizar primeira letra
+    function capitalize(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // Função para criar badge de tipo
+    function createTypeBadge(type) {
+      return `<span class="pokemon-type type-${type}">${capitalize(type)}</span>`;
+    }
+
+    // Função para criar barra de estatística
+    function createStatBar(statName, statValue) {
+      const maxStat = 255;
+      const percentage = (statValue / maxStat) * 100;
+      
+      return `
+        <div class="stat-bar">
+          <span class="stat-name">${statName}</span>
+          <span class="stat-value">${statValue}</span>
+          <div class="stat-bar-fill">
+            <div class="stat-bar-value" style="width: ${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Função para carregar os dados do Pokémon
+    async function loadPokemonDetails() {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const pokemon = await response.json();
+
+        // Atualizar imagem e informações básicas
+        document.getElementById('pokemon-image').src = pokemon.sprites.other['official-artwork'].front_default;
+        document.getElementById('pokemon-image').alt = pokemon.name;
+        document.getElementById('pokemon-number').textContent = `Nº ${String(pokemon.id).padStart(3, '0')}`;
+        document.getElementById('pokemon-name').textContent = pokemon.name;
+        document.getElementById('pokemon-height').textContent = `${pokemon.height / 10}m`;
+        document.getElementById('pokemon-weight').textContent = `${pokemon.weight / 10}kg`;
+
+        // Atualizar tipos
+        const typesContainer = document.getElementById('pokemon-types');
+        typesContainer.innerHTML = pokemon.types.map(type => createTypeBadge(type.type.name)).join('');
+
+        // Carregar descrição do Pokémon
+        const speciesResponse = await fetch(pokemon.species.url);
+        const speciesData = await speciesResponse.json();
+        
+        // Procurar por uma descrição em português, se não encontrar, usa a primeira em inglês
+        const description = speciesData.flavor_text_entries.find(
+          entry => entry.language.name === 'pt-br'
+        ) || speciesData.flavor_text_entries.find(
+          entry => entry.language.name === 'en'
+        );
+
+        if (description) {
+          document.getElementById('pokemon-description').textContent = description.flavor_text
+            .replace(/\f/g, ' ')  // Remove caracteres de formatação
+            .replace(/\n/g, ' ')  // Remove quebras de linha
+            .replace(/\r/g, ' ')  // Remove retornos
+            .replace(/\v/g, ' ')  // Remove tabulações verticais
+            .replace(/\s+/g, ' '); // Remove espaços extras
+        }
+
+        // Atualizar estatísticas
+        const statsContainer = document.getElementById('stats-content');
+        statsContainer.innerHTML = pokemon.stats.map(stat => {
+          const statName = stat.stat.name
+            .replace('special-attack', 'Ataque Especial')
+            .replace('special-defense', 'Defesa Especial')
+            .replace('attack', 'Ataque')
+            .replace('defense', 'Defesa')
+            .replace('speed', 'Velocidade')
+            .replace('hp', 'HP');
+          return createStatBar(statName, stat.base_stat);
+        }).join('');
+
+        // Carregar fraquezas
+        const typeResponse = await fetch(pokemon.types[0].type.url);
+        const typeData = await typeResponse.json();
+        const weaknessesContainer = document.getElementById('weaknesses-content');
+        weaknessesContainer.innerHTML = '';
+        typeData.damage_relations.double_damage_from.forEach(type => {
+          const badge = document.createElement('span');
+          badge.className = `weakness-badge type-${type.name}`;
+          badge.textContent = capitalize(type.name);
+          weaknessesContainer.appendChild(badge);
+        });
+
+        // Carregar evoluções
+        const evolutionResponse = await fetch(speciesData.evolution_chain.url);
+        const evolutionData = await evolutionResponse.json();
+
+        // Função recursiva para processar a cadeia de evolução
+        async function processEvolutionChain(chain) {
+          const evolutions = [];
+          let current = chain;
+
+          while (current) {
+            try {
+              const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${current.species.name}`);
+              const pokemonData = await pokemonResponse.json();
+              evolutions.push({
+                name: current.species.name,
+                image: pokemonData.sprites.other['official-artwork'].front_default,
+                id: pokemonData.id
+              });
+              current = current.evolves_to[0];
+            } catch (error) {
+              console.error('Erro ao carregar evolução:', error);
+              break;
+            }
+          }
+
+          return evolutions;
+        }
+
+        const evolutions = await processEvolutionChain(evolutionData.chain);
+        const evolutionChainContainer = document.getElementById('evolution-chain');
+        evolutionChainContainer.innerHTML = evolutions.map((evolution, index) => `
+          ${index > 0 ? '<div class="evolution-arrow">→</div>' : ''}
+          <div class="evolution-item">
+            <a href="details.html?id=${evolution.id}">
+              <img src="${evolution.image}" alt="${evolution.name}">
+              <p>${capitalize(evolution.name)}</p>
+            </a>
+          </div>
+        `).join('');
+
+      } catch (error) {
+        console.error('Erro ao carregar detalhes do Pokémon:', error);
+      }
+    }
+
+    // Carregar detalhes quando a página carregar
+    window.addEventListener('load', loadPokemonDetails);
+  </script>
+</body>
+</html>
