@@ -9,7 +9,7 @@ const pokemonPerPage = 12; // Pokémon por página
 
 // Função para buscar os Pokémon
 async function fetchPokemon() {
-  for (let i = 1; i <= 151; i++) {
+  for (let i = 1; i <= 400; i++) {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
     const data = await response.json();
 
@@ -25,20 +25,55 @@ async function fetchPokemon() {
   loading.style.display = "none"; // Esconde o spinner após o carregamento
 }
 
+// Função para formatar o nome do Pokémon
+function formatPokemonName(name) {
+  // Lista de casos especiais
+  const specialCases = {
+    'nidoran-f': 'Nidoran♀',
+    'nidoran-m': 'Nidoran♂',
+    'mr-mime': 'Mr. Mime',
+    'ho-oh': 'Ho-Oh',
+    'porygon-z': 'Porygon-Z',
+    'mime-jr': 'Mime Jr.',
+    'type-null': 'Type: Null',
+    'jangmo-o': 'Jangmo-o',
+    'hakamo-o': 'Hakamo-o',
+    'kommo-o': 'Kommo-o',
+    'tapu-koko': 'Tapu Koko',
+    'tapu-lele': 'Tapu Lele',
+    'tapu-bulu': 'Tapu Bulu',
+    'tapu-fini': 'Tapu Fini'
+  };
+
+  // Verifica se é um caso especial
+  if (specialCases[name]) {
+    return specialCases[name];
+  }
+
+  // Trata nomes com hífen
+  if (name.includes('-')) {
+    return name.split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('-');
+  }
+
+  // Formatação padrão: primeira letra maiúscula
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
 // Exibir Pokémon da página atual
 function displayPokemon() {
   const startIndex = (currentPage - 1) * pokemonPerPage;
   const endIndex = startIndex + pokemonPerPage;
+  const paginatedPokemon = allPokemon.slice(startIndex, endIndex);
 
-  const pokemonToDisplay = allPokemon.slice(startIndex, endIndex);
-
-  pokemonContainer.innerHTML = pokemonToDisplay
+  pokemonContainer.innerHTML = paginatedPokemon
     .map(
       (pokemon) => `
       <div class="pokemon-card" onclick="openPokemonDetails(${pokemon.id})">
         <div class="pokemon-number">Nº ${String(pokemon.id).padStart(3, '0')}</div>
-        <img src="${pokemon.image}" alt="${pokemon.name}" />
-        <h3>${pokemon.name}</h3>
+        <img src="${pokemon.image}" alt="${formatPokemonName(pokemon.name)}" />
+        <h3>${formatPokemonName(pokemon.name)}</h3>
         <div class="pokemon-types">
           ${pokemon.types
             .map((type) => `<span class="pokemon-type type-${type}">${type}</span>`)
@@ -51,11 +86,6 @@ function displayPokemon() {
 }
 
 function openPokemonDetails(id) {
-  window.location.href = `details.html?id=${id}`;
-}
-
-    // Função para abrir a página de detalhes
-  function openPokemonDetails(id) {
   window.location.href = `details.html?id=${id}`;
 }
 
@@ -91,10 +121,10 @@ searchBar.addEventListener("input", (e) => {
     pokemonContainer.innerHTML = filteredPokemon
       .map(
         (pokemon) => `
-        <div class="pokemon-card">
+        <div class="pokemon-card" onclick="openPokemonDetails(${pokemon.id})">
           <div class="pokemon-number">Nº ${String(pokemon.id).padStart(3, '0')}</div>
-          <img src="${pokemon.image}" alt="${pokemon.name}" />
-          <h3>${pokemon.name}</h3>
+          <img src="${pokemon.image}" alt="${formatPokemonName(pokemon.name)}" />
+          <h3>${formatPokemonName(pokemon.name)}</h3>
           <div class="pokemon-types">
             ${pokemon.types
               .map((type) => `<span class="pokemon-type type-${type}">${type}</span>`)
