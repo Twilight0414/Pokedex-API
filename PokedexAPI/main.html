@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokédex</title>
   <link rel="icon" href="https://media.baamboozle.com/uploads/images/77925/1594129827_86842">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
       font-family: 'Roboto', Arial, sans-serif;
@@ -176,6 +177,8 @@
     .type-ghost { background-color: #630463; }
     .type-ice { background-color: #71bae4; }
     .type-dragon { background-color: #01309e; }
+    .type-steel { background-color: #a8a8ab; }
+    .type-dark { background-color: #272727; }
 
     /* Animação de entrada dos cards */
     @keyframes fadeInUp {
@@ -216,35 +219,153 @@
     .pagination {
       display: flex;
       justify-content: center;
-      margin: 20px;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
     }
-  
+
     .pagination button {
-      background: #ef5350;
-      color: white;
+      background: none;
       border: none;
-      border-radius: 20px;
-      padding: 10px 20px;
-      font-size: 1em;
-      margin: 0 10px;
+      color: #666;
+      font-size: 16px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
-  
-    .pagination button:hover {
-      background: #d32f2f;
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+
+    .pagination button:hover:not(:disabled) {
+      background: #f0f0f0;
+      color: #ff1a1a;
     }
-  
-    .pagination button.disabled {
-      background: #ddd;
-      color: #888;
+
+    .pagination button:disabled {
+      color: #ccc;
       cursor: not-allowed;
     }
+
+    .pagination span {
+      background: #ff1a1a;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Scroll Top */
+    .scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff1a1a;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .scroll-top:hover {
+      background: #e60000;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .scroll-top.visible {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilos do Loading */
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .pokeball {
+      width: 60px;
+      height: 60px;
+      position: relative;
+      animation: shake 1.25s cubic-bezier(.36,.07,.19,.97) infinite;
+    }
+
+    .pokeball-top {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      background: #ff1a1a;
+      border-radius: 30px 30px 0 0;
+    }
+
+    .pokeball-middle {
+      position: absolute;
+      top: 45%;
+      width: 100%;
+      height: 10%;
+      background: #222;
+      z-index: 2;
+    }
+
+    .pokeball-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background: #222;
+      border: 5px solid #fff;
+      border-radius: 50%;
+      z-index: 3;
+      animation: glow 1.25s ease-in-out infinite;
+    }
+
+    .pokeball-bottom {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50%;
+      background: white;
+      border-radius: 0 0 30px 30px;
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      20% { transform: rotate(-10deg); }
+      40% { transform: rotate(10deg); }
+      60% { transform: rotate(-10deg); }
+      80% { transform: rotate(10deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+      50% { box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+    }
   </style>
-  
-  
 </head>
 <body>
   <header>
@@ -252,18 +373,35 @@
     <p>Descubra todos os Pokémons de todas as gerações</p>
   </header>
 
-  <!-- Barra de pesquisa -->
   <div class="search-container">
-    <input type="text" id="searchBar" placeholder="Pesquise um Pokémon..." />
-  </div>
-  <div class="loading" id="loading">
-    <div class="spinner"></div> Carregando...
+    <input
+      type="text"
+      id="searchBar"
+      placeholder="Busque por nome, número ou tipo..."
+    />
   </div>
 
-  <div class="pokemon-container" id="pokemonContainer"></div>
-
-  <!-- Paginação -->
   <div class="pagination" id="pagination"></div>
+
+  <div id="pokemonContainer" class="pokemon-container">
+    <!-- Pokemon cards will be inserted here -->
+  </div>
+
+  <div class="pagination" id="paginationBottom"></div>
+
+  <button id="scrollTop" class="scroll-top" onclick="scrollToTop()" title="Voltar ao topo">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <div id="loading">
+    <div class="pokeball">
+      <div class="pokeball-top"></div>
+      <div class="pokeball-middle">
+        <div class="pokeball-dot"></div>
+      </div>
+      <div class="pokeball-bottom"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
