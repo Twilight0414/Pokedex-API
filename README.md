@@ -1,4 +1,4 @@
-# 🌟 Pokédex API - O universo Pokémon ao seu alcance! 🌟
+# 🌟 Pokédex API - O universo Pokémon ao seu alcance! 
 <div align="center"> 
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" alt="Pikachu" width="100" /> 
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png" alt="Charmander" width="120" /> 
@@ -10,10 +10,10 @@ Este projeto foi criado para oferecer uma experiência visualmente atraente e or
 ## Como usar
 Clone o repositório:
 ```bash
-git clone https://github.com/seuusuario/pokedex-api.git
+git clone https://github.com/Twilight0414/Pokedex-API.git
 ```
 
-Abra o arquivo `index.html` no navegador.  
+Abra o arquivo `main.html` no navegador.  
 Explore os Pokémon e divirta-se!
 
 ## Tecnologias usadas
