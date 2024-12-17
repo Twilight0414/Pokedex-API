@@ -272,16 +272,17 @@
       justify-content: center;
       gap: 40px;
       padding: 20px 0;
+      flex-wrap: wrap;
     }
 
     .evolution-item {
       text-align: center;
       position: relative;
-      width: 150px;
-      height: 180px;
+      width: 220px;
+      min-height: 240px;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
     }
 
     .evolution-item a {
@@ -291,21 +292,21 @@
       align-items: center;
       position: relative;
       padding-top: 20px;
+      width: 100%;
     }
 
     .pokeball-bg {
       position: absolute;
-      width: 120px;
-      height: 120px;
-      background: 
-        linear-gradient(to bottom, 
-          #ff1c1c 0%, 
-          #ff1c1c 45%, 
-          #222 45%, 
-          #222 55%, 
-          white 55%, 
-          white 100%
-        );
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(to bottom, 
+        #ff1c1c 0%, 
+        #ff1c1c 45%, 
+        #222 45%, 
+        #222 55%, 
+        white 55%, 
+        white 100%
+      );
       border-radius: 50%;
       animation: rotate 10s linear infinite;
       opacity: 0.1;
@@ -315,27 +316,14 @@
       transform: translateX(-50%);
     }
 
-    .pokeball-bg::before {
-      content: '';
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background: white;
-      border: 8px solid #222;
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-    }
-
     .evolution-item img {
-      width: 110px;
-      height: 110px;
+      width: 170px;
+      height: 170px;
       object-fit: contain;
       position: relative;
       z-index: 2;
       transition: transform 0.3s ease;
+      margin: 15px;
     }
 
     .evolution-item:hover img {
@@ -369,6 +357,51 @@
       position: relative;
       z-index: 2;
       margin-top: 20px;
+    }
+
+    .evolution-variants {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .variant-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .variant-item:hover {
+      transform: scale(1.05);
+    }
+
+    .variant-item img {
+      width: 60px !important;
+      height: 60px !important;
+    }
+
+    .variant-item p {
+      font-size: 12px !important;
+      margin: 2px 0 !important;
+    }
+
+    .variant-types {
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .variant-type {
+      padding: 1px 6px;
+      border-radius: 10px;
+      color: white;
+      font-size: 8px;
+      text-transform: capitalize;
     }
 
     .back-button {
@@ -441,17 +474,138 @@
     .evolution-types {
       display: flex;
       justify-content: center;
-      gap: 4px;
-      margin-top: 2px;
+      gap: 8px;
+      margin-top: 5px;
     }
 
-    .evolution-type {
-      padding: 1px 6px;
-      border-radius: 10px;
-      color: white;
-      font-size: 10px;
+    .evolution-types .pokemon-type {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 12px;
       text-transform: capitalize;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      color: #fff;
+      min-width: 65px;
+    }
+
+    .evolution-items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .evolution-item-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .regional-forms {
+      background: #3b3b3b;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .regional-forms-title {
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .regional-forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      justify-items: center;
+    }
+
+    .regional-form-item {
+      text-align: center;
+      position: relative;
+      width: 200px;
+    }
+
+    .regional-form-item a {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .regional-form-item .pokeball-bg {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(to bottom, 
+        #ff1c1c 0%, 
+        #ff1c1c 45%, 
+        #222 45%, 
+        #222 55%, 
+        white 55%, 
+        white 100%
+      );
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+      opacity: 0.1;
+      z-index: 1;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .regional-form-item img {
+      width: 170px;
+      height: 170px;
+      object-fit: contain;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .regional-form-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .regional-form-item .pokemon-name {
+      margin: 10px 0;
+    }
+
+    .regional-form-item .pokemon-name p {
+      margin: 0;
+      font-weight: 600;
+      color: white;
+      font-size: 16px;
+    }
+
+    .regional-form-item .pokemon-name .number {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .regional-form-item .pokemon-types {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin-top: 5px;
+    }
+
+    .regional-form-item .type {
+      padding: 3px 10px;
+      border-radius: 12px;
+      color: white;
+      font-size: 12px;
+      text-transform: capitalize;
+      font-weight: 500;
     }
 
     @keyframes rotate {
@@ -793,11 +947,42 @@
               const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${speciesData.id}`);
               const pokemonData = await pokemonResponse.json();
 
+              // Buscar variantes regionais
+              const variants = [];
+              for (const variety of speciesData.varieties) {
+                if (!variety.is_default) {
+                  try {
+                    const variantResponse = await fetch(variety.pokemon.url);
+                    const variantData = await variantResponse.json();
+                    
+                    // Verificar se é uma forma regional (geralmente contém nomes como 'alola', 'galar', etc.)
+                    const isRegionalForm = variantData.forms.some(form => 
+                      form.name.includes('alola') || 
+                      form.name.includes('galar') || 
+                      form.name.includes('hisui') ||
+                      form.name.includes('paldea')
+                    );
+
+                    if (isRegionalForm) {
+                      variants.push({
+                        name: formatPokemonName(variantData.name),
+                        image: variantData.sprites.other['official-artwork'].front_default,
+                        id: variantData.id,
+                        types: variantData.types.map(type => type.type.name)
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Erro ao buscar variante:', error);
+                  }
+                }
+              }
+
               evolutions.push({
                 name: current.species.name,
                 image: pokemonData.sprites.other['official-artwork'].front_default,
                 id: pokemonData.id,
-                types: pokemonData.types.map(type => type.type.name)
+                types: pokemonData.types.map(type => type.type.name),
+                variants: variants
               });
               current = current.evolves_to[0];
             } catch (error) {
@@ -811,24 +996,49 @@
 
         const evolutions = await processEvolutionChain(evolutionData.chain);
         const evolutionChainContainer = document.getElementById('evolution-chain');
-        evolutionChainContainer.innerHTML = evolutions.map((evolution, index) => `
-          ${index > 0 ? '<div class="evolution-arrow">></div>' : ''}
-          <div class="evolution-item">
-            <div class="pokeball-bg"></div>
-            <a href="details.html?id=${evolution.id}">
-              <img src="${evolution.image}" alt="${formatPokemonName(evolution.name)}">
-              <div class="pokemon-name">
-                <p>${formatPokemonName(evolution.name)}</p>
-                <span class="number">Nº ${String(evolution.id).padStart(3, '0')}</span>
+        evolutionChainContainer.innerHTML = `
+          <div class="evolution-items">
+            ${evolutions.map((evolution, index) => `
+              ${index > 0 ? '<div class="evolution-arrow">></div>' : ''}
+              <div class="evolution-item">
+                <div class="evolution-item-wrapper">
+                  <div class="pokeball-bg"></div>
+                  <img src="${evolution.image}" alt="${formatPokemonName(evolution.name)}">
+                </div>
+                <p>${formatPokemonName(evolution.name)} <span class="number">Nº ${String(evolution.id).padStart(3, '0')}</span></p>
+                <div class="evolution-types">
+                  ${evolution.types.map(type => createTypeBadge(type)).join('')}
+                </div>
               </div>
-              <div class="evolution-types">
-                ${evolution.types.map(type => `
-                  <span class="evolution-type type-${type.toLowerCase()}">${capitalize(type)}</span>
-                `).join('')}
-              </div>
-            </a>
+            `).join('')}
           </div>
-        `).join('');
+          ${evolutions.some(e => e.variants.length > 0) ? `
+            <div class="regional-forms">
+              <div class="regional-forms-title">Formas Regionais</div>
+              <div class="regional-forms-grid">
+                ${evolutions.map(evolution => 
+                  evolution.variants.map(variant => `
+                    <div class="regional-form-item">
+                      <div class="pokeball-bg"></div>
+                      <a href="details.html?id=${variant.id}">
+                        <img src="${variant.image}" alt="${variant.name}">
+                        <div class="pokemon-name">
+                          <p>${formatPokemonName(variant.name.replace('-', ' '))}</p>
+                          <span class="number">Nº ${String(variant.id).padStart(3, '0')}</span>
+                        </div>
+                        <div class="pokemon-types">
+                          ${variant.types.map(type => `
+                            <span class="type type-${type}">${capitalize(type)}</span>
+                          `).join('')}
+                        </div>
+                      </a>
+                    </div>
+                  `).join('')
+                ).join('')}
+              </div>
+            </div>
+          ` : ''}
+        `;
 
       } catch (error) {
         console.error('Erro ao carregar detalhes do Pokémon:', error);
@@ -929,6 +1139,15 @@
     window.addEventListener('load', () => {
       loadPokemonDetails();
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const backButton = document.getElementById('back-button');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            window.location.href = 'main.html';
+        });
+    }
+});
   </script>
 </body>
 </html>

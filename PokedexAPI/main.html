@@ -45,19 +45,39 @@
       margin-bottom: 20px;
     }
   
-    .search-container input {
-      width: 300px;
-      padding: 10px 15px;
+    .search-wrapper {
+      display: flex;
+      gap: 10px;
+      background: white;
+      padding: 10px;
       border-radius: 25px;
-      border: 1px solid #ddd;
-      outline: none;
-      font-size: 1em;
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
     }
-  
-    .search-container input:focus {
-      border-color: #ef5350;
-      box-shadow: 0px 4px 8px rgba(239, 83, 80, 0.3);
+
+    #search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    #generation-filter {
+      border: none;
+      background: #f5f5f5;
+      padding: 5px 10px;
+      border-radius: 15px;
+      outline: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+
+    #generation-filter:hover {
+      background: #ebebeb;
     }
   
     .pokemon-container {
@@ -146,21 +166,14 @@
     }
 
     .pokemon-type {
-      font-size: 0.9em;
-      padding: 8px 30px;
-      border-radius: 15px;
-      text-transform: capitalize;
-      font-weight: 700;
-      color: #fff;
-      transition: all 0.3s ease;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      margin: 0 2px;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
 
-    .pokemon-type:hover {
-      transform: scale(1.1);
-      filter: brightness(1.1);
-    }
-
-    /* Tipos */
     .type-grass { background-color: #78c850; }
     .type-poison { background-color: #a040a0; }
     .type-fire { background-color: #f08030; }
@@ -179,6 +192,11 @@
     .type-dragon { background-color: #01309e; }
     .type-steel { background-color: #a8a8ab; }
     .type-dark { background-color: #272727; }
+
+    .pokemon-type:hover {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
 
     /* Animação de entrada dos cards */
     @keyframes fadeInUp {
@@ -222,36 +240,49 @@
       align-items: center;
       gap: 15px;
       margin: 20px 0;
+      padding: 10px;
     }
 
     .pagination button {
-      background: none;
+      background: #fff;
       border: none;
-      color: #666;
-      font-size: 16px;
+      color: #ef5350;
+      font-size: 24px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      padding: 8px 16px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      padding: 0;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .pagination button:hover:not(:disabled) {
-      background: #f0f0f0;
-      color: #ff1a1a;
+    .pagination button:hover {
+      transform: scale(1.1);
     }
 
     .pagination button:disabled {
       color: #ccc;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
-    .pagination span {
-      background: #ff1a1a;
+    .pagination .page-number {
+      font-size: 16px;
+      font-weight: bold;
       color: white;
-      padding: 8px 16px;
+      min-width: 30px;
+      height: 30px;
+      text-align: center;
+      background-color: #ef5350;
       border-radius: 8px;
-      font-weight: 500;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
     }
 
     /* Scroll Top */
@@ -374,34 +405,39 @@
   </header>
 
   <div class="search-container">
-    <input
-      type="text"
-      id="searchBar"
-      placeholder="Busque por nome, número ou tipo..."
-    />
+    <div class="search-wrapper">
+      <input type="text" id="search-input" placeholder="Busque por nome, número ou tipo...">
+      <select id="generation-filter">
+        <option value="all">Todas as Gerações</option>
+        <option value="1">1ª Geração (1-151)</option>
+        <option value="2">2ª Geração (152-251)</option>
+        <option value="3">3ª Geração (252-386)</option>
+        <option value="4">4ª Geração (387-493)</option>
+        <option value="5">5ª Geração (494-649)</option>
+        <option value="6">6ª Geração (650-721)</option>
+        <option value="7">7ª Geração (722-809)</option>
+        <option value="8">8ª Geração (810-905)</option>
+        <option value="9">9ª Geração (906-1010)</option>
+      </select>
+    </div>
   </div>
-
-  <div class="pagination" id="pagination"></div>
-
-  <div id="pokemonContainer" class="pokemon-container">
-    <!-- Pokemon cards will be inserted here -->
-  </div>
-
-  <div class="pagination" id="paginationBottom"></div>
-
-  <button id="scrollTop" class="scroll-top" onclick="scrollToTop()" title="Voltar ao topo">
-    <i class="fas fa-chevron-up"></i>
-  </button>
 
   <div id="loading">
     <div class="pokeball">
       <div class="pokeball-top"></div>
-      <div class="pokeball-middle">
-        <div class="pokeball-dot"></div>
-      </div>
+      <div class="pokeball-middle"></div>
+      <div class="pokeball-dot"></div>
       <div class="pokeball-bottom"></div>
     </div>
   </div>
+
+  <div class="pagination" id="pagination"></div>
+  <div class="pokemon-container" id="pokemonContainer"></div>
+  <div class="pagination" id="paginationBottom"></div>
+  
+  <button id="scrollTop" class="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
   <script src="script.js"></script>
 </body>
