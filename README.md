@@ -18,7 +18,7 @@ Explore os Pokémon e divirta-se!
 
 ## Tecnologias usadas
 - HTML, CSS e JavaScript para a interface.  
-- API oficial Pokémon para obter os dados.
+- PokeAPI para obter os dados.
 
 ## Recursos principais:
 - Informações detalhadas dos Pokémon, como tipos, habilidades e status.  
